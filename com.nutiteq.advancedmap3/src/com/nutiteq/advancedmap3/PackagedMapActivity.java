@@ -2,6 +2,7 @@ package com.nutiteq.advancedmap3;
 
 import android.os.Bundle;
 
+import com.nutiteq.advancedmap3.datasource.OfflineOnlineTileDataSource;
 import com.nutiteq.datasources.TileDataSource;
 
 /**
@@ -15,17 +16,23 @@ public class PackagedMapActivity extends VectorMapSampleBaseActivity {
         super.onCreate(savedInstanceState);
         mapView.setZoom(3, 0);
     }
-    
+
     @Override
     protected TileDataSource createTileDataSource() {
-        
-        // Using static global variable to pass data. Bad style, avoid this pattern in your apps
-        
-        if (PackageManagerActivity.dataSource != null){
-            return PackageManagerActivity.dataSource;
-        }
-        
-        return super.createTileDataSource();
-    }
 
+        // Using static global variable to pass data. Bad style, avoid this pattern in your apps
+
+//        if (PackageManagerActivity.dataSource != null){
+//            return PackageManagerActivity.dataSource;
+//        }
+//
+//        return super.createTileDataSource();
+
+        TileDataSource combinedDataSource = new OfflineOnlineTileDataSource(
+                PackageManagerActivity.dataSource,
+                super.createTileDataSource());
+
+        return combinedDataSource;
+
+    }
 }
